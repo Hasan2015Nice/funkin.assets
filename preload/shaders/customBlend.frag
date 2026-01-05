@@ -5,6 +5,7 @@ uniform sampler2D backgroundSwag;
 uniform int blendMode;
 
 const int DARKEN = 2;
+const int DIFFERENCE = 3;
 const int HARDLIGHT = 5;
 const int LIGHTEN = 8;
 const int OVERLAY = 11;
@@ -23,6 +24,10 @@ vec3 overlay(vec3 bg, vec3 src) {
 	return hardlight(src, bg);
 }
 
+vec3 difference(vec3 bg, vec3 src) {
+  return abs(bg - src);
+}
+
 vec3 blend(vec3 bg, vec3 src) {
 	if (blendMode == DARKEN) {
 		return min(bg, src);
@@ -32,6 +37,8 @@ vec3 blend(vec3 bg, vec3 src) {
 		return max(bg, src);
 	} else if (blendMode == OVERLAY) {
 		return overlay(bg, src);
+	} else if (blendMode == DIFFERENCE) {
+		return difference(bg, src);
 	} else {
 		return vec3(1, 0, 1);
 	}
@@ -40,6 +47,6 @@ vec3 blend(vec3 bg, vec3 src) {
 void main() {
 	vec4 bg = flixel_texture2D(backgroundSwag, openfl_TextureCoordv);
 	vec4 src = flixel_texture2D(sourceSwag, screenCoord);
-    vec3 res = blend(bg.rgb, src.rgb);
-    gl_FragColor = vec4(mix(bg.rgb, res.rgb, src.a), mix(bg.a, 1.0, src.a));
+  vec3 res = blend(bg.rgb, src.rgb);
+  gl_FragColor = vec4(mix(bg.rgb, res.rgb, src.a), mix(bg.a, 1.0, src.a));
 }
