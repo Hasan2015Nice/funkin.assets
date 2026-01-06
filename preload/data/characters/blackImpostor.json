@@ -1,0 +1,28 @@
+var totalDuration:Float = 157; // song duration in seconds
+var healthDrainPerNote:Int = 1;
+var healthLossOnMissedDodge:Int = 50;
+var healthDrainEnabled:Bool = true;
+
+// Called every frame
+function onUpdate(elapsed:Float):Void {
+    // Enable/disable health drain based on opponent
+    if (!isBlackImpostor(curOpponent)) {
+        healthDrainEnabled = false;
+    } else {
+        healthDrainEnabled = true;
+    }
+}
+
+// Called when a note is hit
+function noteHit(noteData:Int):Void {
+    if (healthDrainEnabled) {
+        health -= healthDrainPerNote;
+    }
+}
+
+// Called when a dodge note is missed
+function dodgeMissed(noteData:Int):Void {
+    if (healthDrainEnabled) {
+        health -= healthLossOnMissedDodge;
+    }
+}
